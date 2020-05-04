@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * (0.4/10),),
+                Spacer(),
                 Center(
                   child: Container(
                     height: MediaQuery.of(context).size.height * (1.2/10),
