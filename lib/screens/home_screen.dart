@@ -96,10 +96,38 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           child: Column(
             children: <Widget>[
+              Center(
+                child: Container(
+                  height: MediaQuery.of(context).size.height * (2 / 10),
+                  padding: EdgeInsets.only(top: 30),
+                  margin: EdgeInsets.only(top: 0, bottom: 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Text(
+                        'Günaydın Kerem!',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: 40,
+                        ),
+                      ),
+                      Text(
+                        _dateTime.day.toString() +
+                            " " +
+                            monthNames[_dateTime.month.toString()] +
+                            ", " +
+                            weekDays[_dateTime.day.toString()],
+                        style: TextStyle(
+                            color: Colors.white.withOpacity(0.6), fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               Container(
                 height: MediaQuery.of(context).size.height * (1 / 10),
-                width: MediaQuery.of(context).size.width - 80,
-                margin: EdgeInsets.only(top: 25),
+                width: MediaQuery.of(context).size.width - 40,
+                margin: EdgeInsets.only(top: 0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,49 +183,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+              Spacer(),
               Container(
                   height: MediaQuery.of(context).size.height * (2.1 / 10),
-                  width: MediaQuery.of(context).size.width - 60,
+                  width: MediaQuery.of(context).size.width - 30,
                   child: alarmList != null
                       ? ListView.builder(
-                          itemCount: alarmList.length,
-                          itemBuilder: (context, index) {
-                            return AlarmLayout(
-                              AlarmModel(DateTime.parse(alarmList[index]),
-                                  alarmStatus[index] == "true" ? true : false),
-                            );
-                          },
-                        )
+                    itemCount: alarmList.length,
+                    itemBuilder: (context, index) {
+                      return AlarmLayout(
+                        AlarmModel(DateTime.parse(alarmList[index]),
+                            alarmStatus[index] == "true" ? true : false),
+                      );
+                    },
+                  )
                       : CircularProgressIndicator()),
-              Spacer(),
-              Center(
-                child: Container(
-                  height: MediaQuery.of(context).size.height * (1.2 / 10),
-                  padding: EdgeInsets.only(top: 0),
-                  margin: EdgeInsets.only(top: 0, bottom: 0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Text(
-                        'Günaydın Kerem!',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontSize: 40,
-                        ),
-                      ),
-                      Text(
-                        _dateTime.day.toString() +
-                            " " +
-                            monthNames[_dateTime.month.toString()] +
-                            ", " +
-                            weekDays[_dateTime.day.toString()],
-                        style: TextStyle(
-                            color: Colors.white.withOpacity(0.6), fontSize: 18),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * (0.1 / 10),
               ),
