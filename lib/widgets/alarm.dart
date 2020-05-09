@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../main.dart';
+import '../main.dart';
+
 class AlarmLayout extends StatefulWidget {
   final AlarmModel date;
   AlarmLayout(this.date);
@@ -25,11 +28,11 @@ class _AlarmLayoutState extends State<AlarmLayout> {
         key: Key(widget.date.dateTime.toString()),
         direction: DismissDirection.startToEnd,
         background: Card(
-          color: Colors.white.withOpacity(0.3),
+          color: mainColor.withOpacity(0.3),
           child: Center(
             child: Icon(
               Icons.delete,
-              color: Colors.white,
+              color: mainColor,
             ),
           ),
         ),
@@ -54,7 +57,7 @@ class _AlarmLayoutState extends State<AlarmLayout> {
                   child: Text(
                     widget.date.dateTime.hour <= 12 ? 'ÖÖ ' : 'ÖS',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.4),
+                      color: mainColor.withOpacity(0.4),
                     ),
                   ),
                 ),
@@ -64,7 +67,7 @@ class _AlarmLayoutState extends State<AlarmLayout> {
                 Text(
                   formatDate(widget.date.dateTime, [HH, ':', nn]),
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
+                    color: mainColor.withOpacity(0.8),
                     fontSize: 35,
                   ),
                 ),
@@ -74,7 +77,7 @@ class _AlarmLayoutState extends State<AlarmLayout> {
                 Text(
                   formatDate(widget.date.dateTime, [dd, '.', mm, '.', yyyy]),
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.4),
+                    color: mainColor.withOpacity(0.4),
                     fontSize: 18,
                   ),
                 ),
@@ -96,7 +99,7 @@ class _AlarmLayoutState extends State<AlarmLayout> {
                 });
               },
               value: actived,
-              activeColor: Color(0xff4cd963),
+              activeColor: mainColor,
             )
           ],
         ));
