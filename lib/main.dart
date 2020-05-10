@@ -1,14 +1,8 @@
-import 'package:alarmapp/screens/belirle_screen.dart';
-import 'package:alarmapp/screens/genel_screen.dart';
-import 'package:alarmapp/screens/hello_screen.dart';
-import 'package:alarmapp/screens/home_screen.dart';
-import 'package:alarmapp/screens/login_screen.dart';
-import 'package:alarmapp/screens/photo_field.dart';
-import 'package:alarmapp/screens/ready_screen.dart';
-import 'package:alarmapp/screens/register_screen.dart';
-import 'package:flutter/material.dart';
 
-import 'screens/home_screen.dart';
+import 'package:alarmapp/screens/hello_screen.dart';
+import 'package:flutter/material.dart';
+import 'screens/hello_screen.dart';
+import 'package:bot_toast/bot_toast.dart';
 
 Color mainColor = Color(0xff093360);
 
@@ -18,9 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: BotToastInit(), //1. call BotToastInit
+      navigatorObservers: [BotToastNavigatorObserver()], //2. registered route observer
       debugShowCheckedModeBanner: false,
       title: 'Alarm App',
-      home: Login(),
+      home: HelloScreen(),
     );
   }
 }

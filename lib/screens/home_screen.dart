@@ -1,12 +1,16 @@
+import 'package:alarmapp/db/user_db.dart';
+import 'package:alarmapp/models/user_model.dart';
+import 'package:alarmapp/screens/photo_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
-import '../models/alarm-model.dart';
+import '../models/alarm_model.dart';
 import '../widgets/alarm.dart';
 
 class HomeScreen extends StatefulWidget {
+  HomeScreen();
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -15,6 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime _dateTime;
   List<String> alarmList;
   List<String> alarmStatus;
+  UserDB userDB;
+  User user;
   var weekDays = {
     '1': "Pazartesi",
     '2': "Salı",
@@ -42,13 +48,26 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    getUserData();
+    getAlarmList();
+    _dateTime = DateTime.now();
+  }
+
+  getAlarmList() {
     SharedPreferences.getInstance().then((prefs) {
       setState(() {
         alarmList = prefs.getStringList('alarms') ?? [];
         alarmStatus = prefs.getStringList('status') ?? [];
       });
     });
-    _dateTime = DateTime.now();
+  }
+
+  getUserData() async {
+    userDB = UserDB.getInstance();
+    User tempUser = await userDB.getUserInfo();
+    setState(() {
+      user = tempUser;
+    });
   }
 
   addAlarm(DateTime dateTime) async {
@@ -75,126 +94,152 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/background.png'),
-                  fit: BoxFit.fill,
-                )
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                image: AssetImage('assets/images/background.png'),
+                fit: BoxFit.fill,
+              )),
             ),
-          ),
-          Center(
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height * (1/10),),
-                Container(
-                  width: MediaQuery.of(context).size.width * (9/10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('Alarmların',style: TextStyle(
-                        color: mainColor,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w700,
-                      ),),
-                      Row(
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.add,color: mainColor,size: 40,),
-                            onPressed: () {
-                              DatePicker.showDateTimePicker(
-                                context,
-                                showTitleActions: true,
-                                minTime: DateTime.now(),
-                                maxTime: DateTime(_dateTime.year + 1),
-                                currentTime: DateTime.now(),
-                                locale: LocaleType.tr,
-                                onConfirm: (date) {
-                                  addAlarm(date);
-                                },
-                              );
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.close,color: mainColor,size: 40,),
-                            onPressed: (){
-                              clearAllAlarms();
-                            },
-                          )
-                        ],
-                      )
-                    ],
+            Center(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * (1 / 10),
                   ),
-                ),
-
-                Container(
-                    height: MediaQuery.of(context).size.height * (2.2/10),
-                    width: MediaQuery.of(context).size.width * (9/10),
-                    child: alarmList != null
-                        ? ListView.builder(
-                      itemCount: alarmList.length,
-                      itemBuilder: (context, index) {
-                        return AlarmLayout(
-                          AlarmModel(DateTime.parse(alarmList[index]),
-                              alarmStatus[index] == "true" ? true : false),
-                        );
-                      },
-                    )
-                        : CircularProgressIndicator()),
-                Spacer(),
-                Center(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height* ( 1.7/10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Container(
+                    width: MediaQuery.of(context).size.width * (9 / 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          'Günaydın Kerem!',
+                          'Alarmların',
                           style: TextStyle(
-                            color: Colors.black.withOpacity(0.8),
-                            fontSize: 40,
+                            color: mainColor,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
-                        Text(
-                          _dateTime.day.toString() +
-                              " " +
-                              monthNames[_dateTime.month.toString()],
-                          style: TextStyle(
-                              color: mainColor.withOpacity(0.6), fontSize: 18),
-                        ),
+                        Row(
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(
+                                Icons.add,
+                                color: mainColor,
+                                size: 40,
+                              ),
+                              onPressed: () {
+                                DatePicker.showDateTimePicker(
+                                  context,
+                                  showTitleActions: true,
+                                  minTime: DateTime.now(),
+                                  maxTime: DateTime(_dateTime.year + 1),
+                                  currentTime: DateTime.now(),
+                                  locale: LocaleType.tr,
+                                  onConfirm: (date) {
+                                    if (user.alarmPass ==
+                                        date.hour.toString() +
+                                            ":" +
+                                            date.minute.toString()) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PhotoField()));
+                                    } else {
+                                      addAlarm(date);
+                                    }
+                                  },
+                                );
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.close,
+                                color: mainColor,
+                                size: 40,
+                              ),
+                              onPressed: () {
+                                clearAllAlarms();
+                              },
+                            )
+                          ],
+                        )
                       ],
                     ),
                   ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * (4/10),
-                  margin: EdgeInsets.only(bottom: 0),
-                  padding: EdgeInsets.only(left: 0),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage("assets/images/image.png"),
-                      )),
-                )
-              ],
+                  Container(
+                      height: MediaQuery.of(context).size.height * (2.2 / 10),
+                      width: MediaQuery.of(context).size.width * (9 / 10),
+                      child: alarmList != null
+                          ? ListView.builder(
+                              itemCount: alarmList.length,
+                              itemBuilder: (context, index) {
+                                return AlarmLayout(
+                                  AlarmModel(
+                                      DateTime.parse(alarmList[index]),
+                                      alarmStatus[index] == "true"
+                                          ? true
+                                          : false),
+                                );
+                              },
+                            )
+                          : CircularProgressIndicator()),
+                  Spacer(),
+                  Center(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * (1.7 / 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Text(
+                            'Günaydın ${user.name}!',
+                            style: TextStyle(
+                              color: Colors.black.withOpacity(0.8),
+                              fontSize: 40,
+                            ),
+                          ),
+                          Text(
+                            _dateTime.day.toString() +
+                                " " +
+                                monthNames[_dateTime.month.toString()] +
+                                " " +
+                                weekDays[_dateTime.weekday.toString()],
+                            style: TextStyle(
+                                color: mainColor.withOpacity(0.6),
+                                fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * (4 / 10),
+                    margin: EdgeInsets.only(bottom: 0),
+                    padding: EdgeInsets.only(left: 0),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage("assets/images/image.png"),
+                    )),
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
-      )
-    );
+          ],
+        ));
   }
 }
-
-
 
 //import 'package:alarmapp/models/alarm-model.dart';
 //import 'package:alarmapp/widgets/alarm.dart';

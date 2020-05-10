@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "58780273707",
+    "firebase_url": "https://alarm-app-42fb8.firebaseio.com",
+    "project_id": "alarm-app-42fb8",
+    "storage_bucket": "alarm-app-42fb8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:58780273707:android:9d7d2ea6973918195dee6e",
+        "android_client_info": {
+          "package_name": "dev.harmonia.alarmapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "58780273707-ij923kb0egg5hmenfa1mvlv0lu555gph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB96jK7Vk6C0H3VkynrUkFZ47i-5DYljRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "58780273707-ij923kb0egg5hmenfa1mvlv0lu555gph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

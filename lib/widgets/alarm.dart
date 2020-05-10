@@ -1,9 +1,8 @@
-import 'package:alarmapp/models/alarm-model.dart';
+import 'package:alarmapp/models/alarm_model.dart';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../main.dart';
 import '../main.dart';
 
 class AlarmLayout extends StatefulWidget {
