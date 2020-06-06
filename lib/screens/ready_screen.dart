@@ -1,5 +1,3 @@
-import 'package:alarmapp/db/user_db.dart';
-import 'package:alarmapp/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
@@ -11,12 +9,8 @@ class ReadyScreen extends StatefulWidget {
 }
 
 class _ReadyScreenState extends State<ReadyScreen> {
-  UserDB _userDB;
   @override
   void initState() {
-    _userDB = UserDB.getInstance();
-    User user = _userDB.getUserInfo();
-    print(user.toString());
     super.initState();
   }
 

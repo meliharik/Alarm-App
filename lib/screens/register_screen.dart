@@ -1,5 +1,6 @@
 import 'package:alarmapp/db/user_db.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
 import 'package:alarmapp/service/service.dart';
@@ -308,14 +309,15 @@ class _RegisterState extends State<Register> {
     if (_formKey.currentState.validate()) {
       if (_usingConditions && _personelData) {
         BotToast.showLoading();
-        _service
-            .register(_mailController.text, _passwordController.text)
-            .then((uid) {
+        var salt =
+            "1234567890qwertyuıopğüasdfghjklşizxcvbnmöçQWERTYUIOPĞÜASDFGHJKLŞİZXCVBNMÖÇ";
+        var hashedPass = Crypt.sha256(_passwordController.text, salt: salt);
+        _service.register(_mailController.text, hashedPass.hash).then((uid) {
           if (uid != null) {
-            _service.addUserDB(_nameController.text, _mailController.text,
-                _passwordController.text);
+            _service.addUserDB(
+                _nameController.text, _mailController.text, hashedPass.hash);
             _userDB.addUserToLocal(uid, _nameController.text,
-                _mailController.text, _passwordController.text, "");
+                _mailController.text, hashedPass.hash, "");
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => ReadyScreen()));
             BotToast.closeAllLoading();

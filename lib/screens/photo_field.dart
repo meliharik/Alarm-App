@@ -9,13 +9,13 @@ class PhotoField extends StatefulWidget {
 
 class _PhotoFieldState extends State<PhotoField> {
   List<Asset> images = List<Asset>();
-  String _error = 'No Error Dectected';
 
   @override
   void initState() {
     super.initState();
   }
 
+/*
   Widget buildGridView() {
     return GridView.count(
       crossAxisCount: 3,
@@ -62,13 +62,13 @@ class _PhotoFieldState extends State<PhotoField> {
       _error = error;
     });
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(onPressed: loadAssets),
+      floatingActionButton: FloatingActionButton(onPressed: null),
       body: Stack(
         children: <Widget>[
           Container(
@@ -163,10 +163,11 @@ class _PhotoFieldState extends State<PhotoField> {
                       ),
                     ],
                   ),
+                  /*
                   Expanded(
                       child: Container(
                     child: buildGridView(),
-                  )),
+                  )),*/
                 ],
               ),
             ),

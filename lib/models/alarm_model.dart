@@ -1,5 +1,6 @@
 class AlarmModel {
   DateTime dateTime;
   bool status;
-  AlarmModel(this.dateTime, this.status);
+  String desc;
+  AlarmModel(this.dateTime, this.status, this.desc);
 }

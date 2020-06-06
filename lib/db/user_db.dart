@@ -37,4 +37,10 @@ class UserDB {
     User user = new User(uid, name, mail, password, alarmPass);
     return user;
   }
+
+  getUID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString("uid") ?? '';
+    return uid;
+  }
 }

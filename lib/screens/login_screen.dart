@@ -2,6 +2,7 @@ import 'package:alarmapp/db/user_db.dart';
 import 'package:alarmapp/models/user_model.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
 import 'package:alarmapp/service/service.dart';
@@ -208,11 +209,13 @@ class _LoginState extends State<Login> {
   login() {
     if (_formKey.currentState.validate()) {
       BotToast.showLoading();
-      _service
-          .login(_mailController.text, _passwordController.text)
-          .then((uid) async {
+      var salt =
+          "1234567890qwertyuıopğüasdfghjklşizxcvbnmöçQWERTYUIOPĞÜASDFGHJKLŞİZXCVBNMÖÇ";
+      var hashedPass = Crypt.sha256(_passwordController.text, salt: salt);
+      print(hashedPass.hash);
+      _service.login(_mailController.text, hashedPass.hash).then((uid) async {
         if (uid != null) {
-          addtoDB(uid);
+          await addtoDB(uid);
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => HomeScreen()),
